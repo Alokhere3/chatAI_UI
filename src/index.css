@@ -3,8 +3,16 @@
   flex-grow: 1;
 }
 .overflow-auto {
-  overflow-y: auto;
+  overflow-y: hidden !important;
+  /* scrollbar: none; */
 }
 .vh-100 {
   height: 100vh;
+}
+
+*{
+  font-size: small;
+}
+body{
+  background-color: black;
 }
