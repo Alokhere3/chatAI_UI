@@ -11,6 +11,7 @@ import { docco ,vs ,xcode} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 // import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
+import { SendIcon } from '../assets/iconSVGs';
 
 function ChatPage() {
   const dispatch = useDispatch();
@@ -72,27 +73,34 @@ function ChatPage() {
     return result;
   }
   return (
-    <div className="container-fluid bg-dark vh-100">
+    <div className="container-fluid  vh-100">
       <div className="row h-100">
         {/* Sidebar */}
-        <div className="col-md-3 border-end p-3">
-          <h5>Contacts</h5>
-          <ul className="list-group bg-dark text-white">
-            <li className="list-group-item list-group bg-dark text-white">John Doe</li>
-            <li className="list-group-item list-group bg-dark text-white">Jane Smith</li>
-            <li className="list-group-item list-group bg-dark text-white">Michael Johnson</li>
-          </ul>
+        <div className="col-md-2 border-end p-3">
+          <h5>History</h5>
+          <div className="list-group">
+  <button type="button" className="list-group-item list-group-item-action active">
+    Cras justo odio
+  </button>
+  <button type="button" className="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+  <button type="button" className="list-group-item list-group-item-action">Morbi leo risus</button>
+  <button type="button" className="list-group-item list-group-item-action">Porta ac consectetur ac</button>
+  <button type="button" className="list-group-item list-group-item-action" >Vestibulum at eros</button>
+</div>
         </div>
         {/* Chat Area */}
-        <div className="col-md-9 d-flex h-100 align-center justify-content-center">
-          <div className="col-md-6 d-flex h-100 flex-column">
+        <div className="col-md-10 d-flex h-100 align-center justify-content-center ">
+          <div className=" d-flex h-100 flex-column">
             {/* Chat Header */}
-            <div className="border-bottom flex-10 p-3">
-              <h5 className="text-white">Chat with AI</h5>
+           <div className="row d-flex align-center justify-content-center">
+           <div className="col-md-6 border-bottom flex-10 p-3">
+              <h5 className="">Chat with AI</h5>
             </div>
+           </div>
 
             {/* Chat Messages */}
-            <div className="p-3 bg-dark overflow-auto h-100"> {/* Added height: 100% */}
+           <div className="row overflow-auto h-100 d-flex align-center justify-content-center ">
+           <div className="p-3  col-md-6  "> {/* Added height: 100% */}
               {chats.map((message, index) => {
                 // Check if the sender is "model"
                 if (message.sender === "model") {
@@ -100,7 +108,7 @@ function ChatPage() {
 
                   return (
                     <div className="mb-3" key={index}>
-                      <div className="p-2 bg-dark text-white rounded w-100">
+                      <div className="p-2   rounded w-100">
                         {formattedData.map((val, i) => {
                           // Render text or code conditionally
                           if (val.type === "text") {
@@ -112,6 +120,7 @@ function ChatPage() {
                           } else if (val.type === "code") {
                             return (
                               <div key={i} className=" p-2 rounded mt-2">
+                                
                                 <SyntaxHighlighter language={val.context.language} style={vs }>
                                   {val.context.code}
                                 </SyntaxHighlighter>
@@ -127,7 +136,7 @@ function ChatPage() {
                   // For non-model messages
                   return (
                     <div className="text-end mb-3" key={index}>
-                      <div className="p-2 bg-secondary text-white rounded w-75 ms-auto">
+                      <div className="p-2 bg-secondary  rounded w-75 ms-auto">
                         <ReactMarkdown>{message.message}</ReactMarkdown>
                       </div>
                     </div>
@@ -135,19 +144,27 @@ function ChatPage() {
                 }
               })}
             </div>
+           </div>
 
             {/* Input Area */}
-            <div className="border-top p-3 d-flex">
+           <div className="row d-flex align-center justify-content-center">
+           <div className="border-top p-3 d-flex col-md-6">
               <input
                 type="text"
                 onChange={(e) => setPromt(e.target.value)}
                 className="form-control me-2"
                 placeholder="Type a message"
               />
-              <button className="btn btn-secondary" onClick={send}>
+              <SendIcon 
+              width={30}
+              color={"white"}
+              onClick={send}
+              />
+              {/* <button className="btn btn-secondary" onClick={send}>
                 Send
-              </button>
+              </button> */}
             </div>
+           </div> 
           </div>
         </div>
       </div>
