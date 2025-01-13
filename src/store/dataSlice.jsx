@@ -31,6 +31,30 @@ export const sendPrompt = createAsyncThunk(
   }
 );
 
+
+//Async thunk to fetch title and save with in history. 
+export const addChatHistory=createAsyncThunk("addChatHistory",async(message,{ rejectWithValue })=>{
+  console.log("add history")
+     // Include the complete chat context in the API request
+     const context = message.slice(0,10)
+     .map((msg) => `${msg.sender}: ${msg.message}`)
+     .join("\n");
+  try{
+    const response = await axios.post(
+      "http://localhost:3000/guestUser/chatTitle",
+      {
+        prompt:`${context }`,
+      }
+    );
+    console.log(response);
+    return response.data; // Ensure payload structure aligns with `extraReducers`
+  } catch(error){
+    console.error(error);
+    // Return a rejected value for proper error handling in `rejected` case
+    return rejectWithValue(error.response?.data || error.message);
+  }
+})
+
 // Data Slice
 const dataSlice = createSlice({
   name: 'data',
@@ -42,35 +66,18 @@ const dataSlice = createSlice({
     error: null,
   },
   reducers: {
-    addChatHistory: (state, action) => {
-      let newChat = action.payload;
-
-      // Generate a unique ID if not provided
-      if (!newChat.id) {
-        newChat = { ...newChat, id: uuidv4() }; // Generate a UUID
-      }
-
-      const existingIndex = state.chatHistory.findIndex((chat) => chat.id === newChat.id);
-
-      if (existingIndex !== -1) {
-        // If the chat exists, update it and move it to the beginning
-        state.chatHistory[existingIndex] = newChat;
-        state.chatHistory = [
-          state.chatHistory[existingIndex],
-          ...state.chatHistory.slice(0, existingIndex),
-          ...state.chatHistory.slice(existingIndex + 1),
-        ];
-      } else {
-        // If it doesn't exist, add it to the beginning
-        state.chatHistory.unshift(newChat);
-      }
-    },
     deleteChatHistory: (state) => {
       state.chatHistory = []; // Clear all chat history
     },
     deleteChatById: (state, action) => {
       const chatId = action.payload; // Assume `payload` is the `id` of the chat to delete
       state.chatHistory = state.chatHistory.filter((chat) => chat.id !== chatId);
+    },
+    loadChat: (state, action) => {
+      const chatId = action.payload; // Assume `payload` is the `id` of the chat to delete
+      let recentChat = state.chatHistory.filter((chat) => chat.id === chatId);
+      console.log(chatId)
+      if(recentChat.length)state.chats=recentChat.chat
     },
   },
   extraReducers: (builder) => {
@@ -89,10 +96,25 @@ const dataSlice = createSlice({
         state.error = action.payload || action.error.message;
         state.chats.push({ message: "Error: something went wrong", sender: "model" });
         console.error(action.error.message);
-      });
+      })
+      .addCase(addChatHistory.pending,(state,action)=>{
+      
+      })
+      .addCase(addChatHistory.fulfilled,(state,action)=>{
+        const message={chat:state.chats,id:uuidv4(),title:action.payload.chatTitle}
+        state.chatHistory.unshift(message)
+        state.chats=[]
+        console.log(message)
+      })
+      .addCase(addChatHistory.rejected,(state,action)=>{
+        state.status = 'failed';
+        state.error = action.payload || action.error.message;
+        state.chats.push({ message: "Error: something went wrong", sender: "model" });
+        console.error(action.error.message);
+      })
   },
 });
 
 // Exporting Actions and Reducer
-export const { addChatHistory, deleteChatHistory, deleteChatById } = dataSlice.actions;
+export const {loadChat,deleteChatHistory, deleteChatById } = dataSlice.actions;
 export default dataSlice.reducer;
