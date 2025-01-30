@@ -74,10 +74,15 @@ const dataSlice = createSlice({
       state.chatHistory = state.chatHistory.filter((chat) => chat.id !== chatId);
     },
     loadChat: (state, action) => {
-      const chatId = action.payload; // Assume `payload` is the `id` of the chat to delete
-      let recentChat = state.chatHistory.filter((chat) => chat.id === chatId);
-      console.log(chatId)
-      if(recentChat.length)state.chats=recentChat.chat
+      const chatId = action.payload;
+      const recentChat = state.chatHistory.filter((chat) => chat.id === chatId);
+    
+      if (recentChat.length > 0) { // Check if a chat was found
+        state.chats = recentChat[0].chat;
+        console.log(state.chats, "Loaded chat"); // Log the chats array
+      } else {
+        console.log("Chat not found"); // Handle the case where the chat isn't found
+      }
     },
   },
   extraReducers: (builder) => {

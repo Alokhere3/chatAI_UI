@@ -86,7 +86,7 @@ function ChatPage() {
                 console.log(chat)
                 return(
 
-                  <button key={i} type="button" onClick={()=>{dispatch(loadChat(chat.id))}} className={"list-group-item btn-sm list-group-item-action p1"+ " "+ (i==0?"active":"")}>{chat.title.slice(0,20)}...</button>
+                  <button key={i} type="button" onClick={()=>{dispatch(loadChat(chat.id))}} className={"list-group-item btn-sm list-group-item-action p1"+ " "+ (i==0?"active":"")}>{chat.title?.slice(0,20)}...</button>
                 )
               })
             }
