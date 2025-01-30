@@ -41,7 +41,7 @@ export const addChatHistory=createAsyncThunk("addChatHistory",async(message,{ re
      .join("\n");
   try{
     const response = await axios.post(
-      "http://localhost:3000/guestUser/chatTitle",
+      "https://chatai-server-l0ve.onrender.com/guestUser/chatTitle",
       {
         prompt:`${context }`,
       }
