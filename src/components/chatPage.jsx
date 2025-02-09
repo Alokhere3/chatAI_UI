@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {sendPrompt,addChatHistory, loadChat } from '../store/dataSlice';
 import ReactMarkdown from 'react-markdown';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism.css'; //Example style, you can use another
+// import 'prismjs/components/prism-clike';
+// import 'prismjs/components/prism-javascript';
+// import 'prismjs/themes/prism.css'; //Example style, you can use another
 import geminiLogo from "../assets/Images/Google_Gemini_logo.svg.png"
 // import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { EditIcon, SendIcon } from '../assets/iconSVGs';
+import { vs } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 function ChatPage() {
   const dispatch = useDispatch();
