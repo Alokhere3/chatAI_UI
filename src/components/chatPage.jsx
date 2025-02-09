@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {sendPrompt,addChatHistory, loadChat } from '../store/dataSlice';
 import ReactMarkdown from 'react-markdown';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css'; //Example style, you can use another
-import { docco, vs, xcode } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import geminiLogo from "../assets/Images/Google_Gemini_logo.svg.png"
 // import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -22,13 +19,11 @@ function ChatPage() {
   const  error = useSelector((state) => state.error);
   const  chatHistory = useSelector((state) => state.chatHistory);
   useEffect(() => {
-    console.log(chatHistory)
   }, [chatHistory])
   const send = () => {
 
     dispatch(sendPrompt({ prompt, chats }))
     setPromt("")
-    console.log(prompt)
   }
 
   function splitTextAndCode(input) {
